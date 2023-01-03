@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Pirmas puslapis{% endblock %}
+
+{% block content %}
+<h3>Sveiki atvykę į mūsų autoservisą</h3>
+<br/>
+<p>Teikiamų paslaugų kiekis: <b>{{ paslaugu_kiekis }}</b></p>
+<p>Atliktų taisymų kiekis: <b>{{ atliktu_uzsakymu_kiekis }}</b></p>
+<p>Registruotų automobilių kiekis: <b>{{ automobiliu_kiekis }}</b></p>
+<p>Čia jūs lankotes <b>{{ num_visits }}-ą</b> kartą.</p>
+{% endblock %}

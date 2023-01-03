@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Order" %}:{% endblock %}
+
+{% block content %}
+<h1>{% trans "Order" %}:</h1>
+<br>
+<ul>
+    <li>{% trans "Vehicle" %}: <b>{{ object.automobilis }}</b></li>
+    <li>{% trans "Date" %}: {{ object.data }}</li>
+    <li>{% trans "Status" %}: {{ object.statusas }}</li>
+    <li>{% trans "Deadline" %}: {{ object.terminas }}</li>
+    <li>{% trans "User" %}: {{ object.vartotojas }}</li>
+</ul>
+
+{% if object.vartotojas == user %}
+<div>
+  <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'manouzsakymas_update' object.id %}">{% trans "Edit" %}:</a>
+  <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'manouzsakymas_delete' object.id %}">{% trans "Delete" %}:</a>
+  <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'manouzsakymas_newline' object.id %}">{% trans "Add line" %}:</a>
+</div>
+{% endif %}
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">{% trans "Service" %}:</th>
+      <th scope="col">{% trans "Quantity" %}:</th>
+      <th scope="col">{% trans "Price" %}:</th>
+      <th scope="col">{% trans "Sum" %}:</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for eilute in object.eilutes.all %}
+    <tr>
+      <th scope="row">{{ eilute.paslauga.pavadinimas }}</th>
+      <td>{{ eilute.kiekis }}</td>
+      <td>{{ eilute.paslauga.kaina }}</td>
+      <td>{{ eilute.suma }}
+              <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'manouzsakymas_deleteline' object.id eilute.id %}">{% trans "Delete" %}:</a>
+              <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'manouzsakymas_updateline' object.id eilute.id %}">{% trans "Edit" %}:</a>
+      </td>
+    </tr>
+  {% endfor %}
+    <tr>
+        <td colspan="3"></td>
+      <th>SUMA: {{ object.bendra }}</th>
+    </tr>
+  </tbody>
+</table>
+</br>
+  <img class="rounded-circle account-img" src="{{ object.vartotojas.profile.nuotrauka.url }}">
+  <h4>Komentarai:</h4>
+  {% if user.is_authenticated %}
+  <div class="fieldWrapper">
+    <hr><br/>
+    <h4>Palikite komentarą:</h4>
+    <form action="" method="post">
+      {% csrf_token %}
+      {{ form.komentaras }}</br>
+      <input type="submit" value="Išsaugoti">
+    </form>
+  </div>
+  {% endif %}
+  {% if object.komentarai %}
+    {% for komentaras in object.komentarai.all %}
+      <hr>
+      <strong>{{ komentaras.vartotojas }}</strong>, <em>{{ komentaras.data}}</em>
+      <p>{{ komentaras.komentaras }}</p>
+    {% endfor %}
+  {% else %}
+    <p>{% trans "No comments" %}:</p>
+  {% endif %}
+{% endblock %}

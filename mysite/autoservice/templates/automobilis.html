@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Automobilis{% endblock %}
+
+{% block content %}
+{% load static %}
+{% if automobilis.photo %}
+<img src="{{ automobilis.photo.url }}" style="width:300px" class="card-img-top" alt="...">
+{% else %}
+<img src="{% static 'img/no-image.png' %}" style="width:300px" class="card-img-top">
+{% endif %}
+<br>
+<br>
+<ul>
+    <li>Automobilis: <b>{{ automobilis.modelis }}</b></li>
+    <li>Valstybinis numeris: {{ automobilis.valstybinis_nr }}</li>
+    <li>VIN kodas: {{ automobilis.vin_kodas }}</li>
+    <li>Klientas: {{ automobilis.kliento_vardas }}</li>
+    <li>Aprašymas: </li>
+    <p>{{ automobilis.aprasymas | safe }}</p>
+</ul>
+<h3>Užsakymai:</h3>
+<ul>
+{% for uzsakymas in automobilis.uzsakymai.all %}
+    <li><a href="{% url 'uzsakymas' uzsakymas.id %}">{{ uzsakymas }}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}
